@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    networks:
+    - deployml_network
+
+  webserver:
+    image: ehren12/webserver
+    build: ./server
+    networks:
+    - deployml_network
+    depends_on:
+    - redis
+    env_file:
+    - .env
+    environment:
+    - CLIENT_SLEEP=0.25  # Time in ms between each poll by web server against Redis
+    - CLIENT_MAX_TRIES=100  # Num tries by web server to retrieve results from Redis before giving up
+    deploy:
+      placement:
+        constraints:
+        - node.role == manager
+
+networks:
+    deployml_network:
