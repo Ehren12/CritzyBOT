@@ -4,7 +4,7 @@ FROM python:3.10-slim-bullseye
 ENV PYTHONUNBUFFERED True
 ENV APP_HOME /app
 WORKDIR $APP_HOME
-COPY . ./
+COPY ./server ./
 
 RUN apt update
 RUN apt install -y pkg-config
@@ -15,4 +15,4 @@ RUN apt install -y libgirepository1.0-dev
 
 RUN pip install --no-cache-dir -r ./server/requirements.txt
 
-CMD ["uvicorn", "server.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
