@@ -8,7 +8,7 @@ COPY . ./
 
 RUN apt update
 RUN apt install -y pkg-config
-RUN apt install -y libcairo2-dev libpython3.10-dev python3-dev libcairo2
+RUN apt install -y libcairo2-dev python3-dev libcairo2
 RUN apt install -y gcc
 RUN apt install -y build-essential
 RUN apt install -y libgirepository1.0-dev
