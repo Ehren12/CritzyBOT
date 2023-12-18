@@ -1,21 +1,18 @@
-#It instructs Docker Engine to use official python:3.10 as the base image
-FROM python:3.10
+# https://hub.docker.com/_/python
+FROM python:3.10-slim-bullseye
 
-#It creates a working directory(app) for the Docker image and container
-WORKDIR /app
+ENV PYTHONUNBUFFERED True
+ENV APP_HOME /app
+WORKDIR $APP_HOME
+COPY . ./
 
-#It copies the framework and the dependencies for the FastAPI application into the working directory
-COPY requirements.txt .
+RUN apt update
+RUN apt install -y pkg-config
+RUN apt install -y libcairo2-dev libpython3.10-dev python3-dev libcairo2
+RUN apt install -y gcc
+RUN apt install -y build-essential
+RUN apt install -y libgirepository1.0-dev
 
-RUN pip install --upgrade pip
-#It will install the framework and the dependencies in the `requirements.txt` file.
-RUN pip3 install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-#It will copy the remaining files and the source code from the host `fast-api` folder to the `app` container working directory
-COPY . .
-
-#It will expose the FastAPI application on port `8000` inside the container
-EXPOSE 8000
-
-#It is the command that will start and run the FastAPI application container
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
