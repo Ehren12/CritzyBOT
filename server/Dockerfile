@@ -13,6 +13,6 @@ RUN apt install -y gcc
 RUN apt install -y build-essential
 RUN apt install -y libgirepository1.0-dev
 
-RUN pip install --no-cache-dir -r ./server/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
