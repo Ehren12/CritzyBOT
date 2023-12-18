@@ -11,8 +11,8 @@ import redis
 
 load_dotenv()
 
-tokenizer = BlenderbotTokenizer.from_pretrained("facebook/blenderbot-400M-distill", local_files_only=True)
-model = BlenderbotForConditionalGeneration.from_pretrained("facebook/blenderbot-400M-distill", local_files_only=True)
+tokenizer = BlenderbotTokenizer.from_pretrained("facebook/blenderbot-400M-distill")
+model = BlenderbotForConditionalGeneration.from_pretrained("facebook/blenderbot-400M-distill")
 class UserMSGRequest(BaseModel):
     message: str
     
