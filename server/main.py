@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
+from transformers import AutoTokenizer, BlenderbotSmallForConditionalGeneration
 from helpers import in_cache
 
 from fastapi import FastAPI
@@ -11,8 +11,8 @@ import redis
 
 load_dotenv()
 
-tokenizer = BlenderbotTokenizer.from_pretrained("facebook/blenderbot-400M-distill")
-model = BlenderbotForConditionalGeneration.from_pretrained("facebook/blenderbot-400M-distill")
+model = BlenderbotSmallForConditionalGeneration.from_pretrained("facebook/blenderbot_small-90M")
+tokenizer = AutoTokenizer.from_pretrained("facebook/blenderbot_small-90M")
 class UserMSGRequest(BaseModel):
     message: str
     
@@ -34,6 +34,6 @@ async def root(utterance: UserMSGRequest):
         return r.get(is_in_cache.closest_match)
     inputs = tokenizer(utterance.message, return_tensors = "pt")
     results = model.generate(**inputs)
-    response = tokenizer.decode(results[0])
+    response = tokenizer.batch_decode(results, skip_special_tokens=True)[0]
     r.set(utterance.message, response, 6000)
     return response
